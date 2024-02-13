@@ -20,8 +20,9 @@ print(f"Building PyTorch extension for tiny-cuda-nn version {VERSION}")
 ext_modules = []
 
 if "TCNN_CUDA_ARCHITECTURES" in os.environ and os.environ["TCNN_CUDA_ARCHITECTURES"]:
-    compute_capability = [int(x) for x in os.environ["TCNN_CUDA_ARCHITECTURES"].replace(";", ",").split(",")]
-    print(f"Obtained compute capabilities {compute_capability} from environment variable TCNN_CUDA_ARCHITECTURES")
+    compute_capabilities = [int(x) for x in os.environ["TCNN_CUDA_ARCHITECTURES"].replace(";", ",").split(",")]
+    compute_capability = compute_capabilities[0]
+    print(f"Obtained compute capabilities {compute_capabilities} from environment variable TCNN_CUDA_ARCHITECTURES")
 elif torch.cuda.is_available():
     major, minor = torch.cuda.get_device_capability()
     compute_capability = major * 10 + minor
