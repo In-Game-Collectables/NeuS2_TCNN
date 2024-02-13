@@ -19,14 +19,14 @@ print(f"Building PyTorch extension for tiny-cuda-nn version {VERSION}")
 
 ext_modules = []
 
-if torch.cuda.is_available():
+if "TCNN_CUDA_ARCHITECTURES" in os.environ and os.environ["TCNN_CUDA_ARCHITECTURES"]:
+    compute_capabilities = [int(x) for x in os.environ["TCNN_CUDA_ARCHITECTURES"].replace(";", ",").split(",")]
+    print(f"Obtained compute capabilities {compute_capabilities} from environment variable TCNN_CUDA_ARCHITECTURES")
+elif torch.cuda.is_available():
     major, minor = torch.cuda.get_device_capability()
     compute_capability = major * 10 + minor
-elif "TCNN_CUDA_ARCHITECTURES" in os.environ and os.environ["TCNN_CUDA_ARCHITECTURES"]:
-	compute_capabilities = [int(x) for x in os.environ["TCNN_CUDA_ARCHITECTURES"].replace(";", ",").split(",")]
-	print(f"Obtained compute capabilities {compute_capabilities} from environment variable TCNN_CUDA_ARCHITECTURES")
 else:
-	raise EnvironmentError("PyTorch CUDA is unavailable. tinycudann requires PyTorch to be installed with the CUDA backend.")
+    raise EnvironmentError("PyTorch CUDA is unavailable. tinycudann requires PyTorch to be installed with the CUDA backend.")
 
 include_networks = True
 if "--no-networks" in sys.argv:
