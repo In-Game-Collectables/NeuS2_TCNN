@@ -21,7 +21,7 @@ ext_modules = []
 
 if torch.cuda.is_available():
     major, minor = torch.cuda.get_device_capability()
-	compute_capability = major * 10 + minor
+    compute_capability = major * 10 + minor
 elif "TCNN_CUDA_ARCHITECTURES" in os.environ and os.environ["TCNN_CUDA_ARCHITECTURES"]:
 	compute_capabilities = [int(x) for x in os.environ["TCNN_CUDA_ARCHITECTURES"].replace(";", ",").split(",")]
 	print(f"Obtained compute capabilities {compute_capabilities} from environment variable TCNN_CUDA_ARCHITECTURES")
